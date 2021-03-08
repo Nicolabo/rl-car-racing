@@ -10,10 +10,12 @@ from typing import List, Tuple
 
 Experience = namedtuple('Experience', ['state', 'action', 'reward', 'last_state'])
 
+
 class Agent:
-    def __init__(self, env, net, hyper_parameters):
+    def __init__(self, env, net, device, hyper_parameters):
         self._env = env
         self._net = net
+        self._device = device
         self._hyper_parameters = hyper_parameters
 
         self._optimizer = optim.Adam(self._net.parameters(), lr=hyper_parameters.learning_rate)
@@ -80,13 +82,13 @@ class Agent:
                        predict_values: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         rewards_np = np.array(rewards)
 
-        last_states_v = torch.FloatTensor(np.array(last_states, copy=False))
+        last_states_v = torch.FloatTensor(np.array(last_states, copy=False)).to(self._device)
         last_vals = self._net(last_states_v)[2]
         last_vals_np = last_vals.squeeze().data.numpy()
         last_vals_np *= self._hyper_parameters.gamma ** self._hyper_parameters.reward_steps
         rewards_np += last_vals_np
 
-        return_v = torch.FloatTensor(rewards_np)
+        return_v = torch.FloatTensor(rewards_np).to(self._device)
 
         loss = F.mse_loss(predict_values.squeeze(-1), return_v)
         advantage = return_v.unsqueeze(dim=-1) - predict_values.detach()

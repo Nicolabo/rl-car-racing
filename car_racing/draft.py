@@ -1,5 +1,4 @@
 import numpy as np
-import ptan
 from tensorboardX import SummaryWriter
 import gym
 import torch

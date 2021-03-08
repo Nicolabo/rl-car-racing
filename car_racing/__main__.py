@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 
 from car_racing.environment import Environment
 from car_racing.model import ActorCritic
@@ -7,9 +8,10 @@ from car_racing.config import config, hyper_parameters
 
 if __name__ == "__main__":
 
+    device = torch.device("cpu")
     env = Environment(config.environment)
-    net = ActorCritic(env.observation_space.shape, env.action_space.shape[0])
-    agent = Agent(env, net, hyper_parameters)
+    net = ActorCritic(env.observation_space.shape, env.action_space.shape[0]).to(device)
+    agent = Agent(env, net, device, hyper_parameters)
 
     training_score = 0
     batch = []
@@ -39,7 +41,7 @@ if __name__ == "__main__":
         training_score = 0.9 * training_score + 0.1 * episode_score
 
         if e % 100 == 0:
-            print(f'Ep: {e}: Last score: {np.round(episode_score, 2)}, Average score: {np.round(training_score, 2)} ')
+            print(f'Ep: {e}: Last score: {np.round(episode_score, 2)}, Average score: {np.round(training_score, 2)}')
 
         if training_score > env.spec.reward_threshold:
             print("Training completed - problem solved!")
