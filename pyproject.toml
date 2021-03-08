@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "rl-car-racing"
+version = "0.1.0"
+description = ""
+authors = ["Mikolaj Bogucki <mikolaj.bogucki@pearson.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pip = "^21.0.1"
+numpy = "^1.20.1"
+gym = {version = "0.18.0", extras = ["box2d"]}
+jupyterlab = "^3.0.9"
+torch = "1.7.0"
+pyglet = "1.5.0"
+matplotlib = "^3.3.4"
+stable-baselines3 = {extras = ["extra"], version = "^0.11.1"}
+ptan = "^0.7"
+tensorboardX = "^2.1"
+ray = {extras = ["rllib"], version = "^1.2.0"}
+aiohttp = "^3.7.4"
+torchvision = "0.8.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
